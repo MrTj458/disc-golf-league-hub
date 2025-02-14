@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Leagues
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1>Leagues</h1>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="col-auto">
+          <a href="{% url 'league_new' %}" class="btn btn-primary ms-auto" role="button">Create New League</a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="row">
+      <div class="col">
+        <hr />
+      </div>
+    </div>
+    <div class="row g-2 row-cols-1 row-cols-md-2 row-cols-xl-3">
+      {% for league in league_list %}
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <h2><a href="{{ league.get_absolute_url }}">{{ league.name }}</a></h2>
+            </div>
+            <div class="card-body">Current ace pot: {{ league.ace_pot }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

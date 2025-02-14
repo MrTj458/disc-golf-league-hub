@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Delete League
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="card mt-5 mx-auto" style="max-width:450px;">
+      <div class="card-header">
+        <h1 class="">Delete League</h1>
+      </div>
+      <div class="card-body">
+        <p>
+          Are you sure you want to delete <em>"{{ league.name }}"</em>?
+        </p>
+        <p>This action is permanent and cannot be undone.</p>
+        <form method="post">
+          {% csrf_token %}
+          <div class="d-flex justify-content-end align-items-center">
+            <a href="{{ league.get_absolute_url }}" class="btn btn-secondary me-2" role="button">Cancel</a>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
