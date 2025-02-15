@@ -1,14 +1,19 @@
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
     UpdateView,
     DeleteView,
+    FormView,
 )
+from django.views import View
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
-from .models import League
+from .models import League, Round
+from .forms import RoundForm
 
 
 class LeagueListView(ListView):
@@ -67,3 +72,35 @@ class LeagueDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self) -> bool | None:
         obj = self.get_object()
         return obj.user == self.request.user  # type: ignore
+
+
+class RoundDetailView(DetailView):
+    model = Round
+    template_name = "leagues/round_detail.html"
+
+
+class RoundCreateView(
+    LoginRequiredMixin, UserPassesTestMixin, SingleObjectMixin, FormView
+):
+    model = League
+    form_class = RoundForm
+    template_name = "leagues/round_new.html"
+
+    def test_func(self) -> bool | None:
+        obj = self.get_object()
+        return obj.user == self.request.user  # type: ignore
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        round = form.save(commit=False)
+        round.league = self.object
+        round.save()
+        self.success_url = reverse("round_detail", kwargs={"pk": round.pk})
+        return super().form_valid(form)

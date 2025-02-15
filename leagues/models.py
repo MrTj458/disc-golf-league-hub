@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.utils import timezone
 
 from .base_models import BaseModel
 
@@ -22,13 +23,23 @@ class League(BaseModel):
         return reverse("league_detail", kwargs={"pk": self.pk})
 
 
-# class Round(BaseModel):
-#     day = models.DateField(auto_now_add=True)
-#     par = models.IntegerField(default=54)
-#     payout = models.IntegerField(default=0)
-#     complete = models.BooleanField(default=False)
+def default_round_name():
+    return timezone.now().strftime("%m/%d/%Y")
 
-#     league = models.ForeignKey(League, on_delete=models.CASCADE)
+
+class Round(BaseModel):
+    name = models.CharField(max_length=200, default=default_round_name)
+    par = models.IntegerField(default=54)
+    payout = models.IntegerField(default=0)
+    complete = models.BooleanField(default=False)
+
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self) -> str:
+        return reverse("round_detail", kwargs={"pk": self.pk})
 
 
 # class Player(BaseModel):
