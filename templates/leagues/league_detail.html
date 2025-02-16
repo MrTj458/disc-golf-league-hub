@@ -12,9 +12,6 @@
       </div>
       {% if user.pk == league.user.pk %}
         <div class="col-auto">
-          <a href="{% url 'round_new' league.pk %}" class="btn btn-primary">Start New Round</a>
-        </div>
-        <div class="col-auto">
           <a href="{% url 'league_edit' league.pk %}" class="btn btn-secondary">Edit</a>
         </div>
       {% endif %}
@@ -28,6 +25,11 @@
           <li class="nav-item">
             <a href="{% url 'league_detail_rounds' league.pk %}" class="nav-link {% if request.resolver_match.view_name == 'league_detail_rounds' %}active{% endif %}">Rounds</a>
           </li>
+          {% if user.pk == league.user.pk %}
+            <li class="nav-item">
+              <a href="{% url 'league_detail_players' league.pk %}" class="nav-link {% if request.resolver_match.view_name == 'league_detail_players' %}active{% endif %}">Players</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>

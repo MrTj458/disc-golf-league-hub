@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  Edit Player
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="card mt-5 mx-auto" style="max-width:450px;">
+      <div class="card-header">
+        <h1 class="">Edit Player</h1>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-flex justify-content-end align-items-center">
+            <a href="{{ player.get_absolute_url }}" class="btn btn-secondary me-2" role="button">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'player_delete' player.pk %}" class="btn btn-danger">Delete Player</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

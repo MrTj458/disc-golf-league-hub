@@ -42,13 +42,17 @@ class Round(BaseModel):
         return reverse("round_detail", kwargs={"pk": self.pk})
 
 
-# class Player(BaseModel):
-#     name = models.CharField(max_length=250)
-#     udisc_name = models.CharField(max_length=250, null=True)
+class Player(BaseModel):
+    name = models.CharField(max_length=250)
+    udisc_name = models.CharField(max_length=250, blank=True)
 
-#     user = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
-#     )
+    league = models.ForeignKey(League, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self) -> str:
+        return reverse("league_detail_players", kwargs={"pk": self.league.pk})
 
 
 # class Score(BaseModel):
