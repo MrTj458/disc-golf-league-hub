@@ -69,6 +69,7 @@ class Player(BaseModel):
 
 # class CTP(BaseModel):
 #     hole = models.IntegerField()
+#     buy_in = models.IntegerField()
 #     payout = models.IntegerField(default=0)
 
 #     winner = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)
